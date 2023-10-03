@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app/model/item.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app/utils/ad_helper.dart';
+// import 'package:todo_app/utils/ad_helper.dart';
 
 class HomeScereen extends StatefulWidget {
   const HomeScereen({super.key});
@@ -14,7 +14,7 @@ class HomeScereen extends StatefulWidget {
 
 class _HomeScereenState extends State<HomeScereen> {
   List<Map<String, dynamic>> myList = [];
-  BannerAd? _bannerAd;
+  // BannerAd? _bannerAd;
   final _todoBox = Hive.box('todo');
 
   final DateFormat formatter1 = DateFormat('MM/dd');
@@ -23,21 +23,21 @@ class _HomeScereenState extends State<HomeScereen> {
   @override
   void initState() {
     super.initState();
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _bannerAd = ad as BannerAd;
-          });
-        },
-        onAdFailedToLoad: (ad, err) {
-          ad.dispose();
-        },
-      ),
-    ).load();
+    // BannerAd(
+    //   adUnitId: AdHelper.bannerAdUnitId,
+    //   request: const AdRequest(),
+    //   size: AdSize.banner,
+    //   listener: BannerAdListener(
+    //     onAdLoaded: (ad) {
+    //       setState(() {
+    //         _bannerAd = ad as BannerAd;
+    //       });
+    //     },
+    //     onAdFailedToLoad: (ad, err) {
+    //       ad.dispose();
+    //     },
+    //   ),
+    // ).load();
 
     _refreshItems(); // Load data when app starts
   }
@@ -117,15 +117,15 @@ class _HomeScereenState extends State<HomeScereen> {
         child: SafeArea(
           child: Column(
             children: [
-              if (_bannerAd != null)
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    width: _bannerAd!.size.width.toDouble(),
-                    height: _bannerAd!.size.height.toDouble(),
-                    child: AdWidget(ad: _bannerAd!),
-                  ),
-                ),
+              // if (_bannerAd != null)
+              //   Align(
+              //     alignment: Alignment.topCenter,
+              //     child: SizedBox(
+              //       width: _bannerAd!.size.width.toDouble(),
+              //       height: _bannerAd!.size.height.toDouble(),
+              //       child: AdWidget(ad: _bannerAd!),
+              //     ),
+              //   ),
               const TabBar(tabs: [
                 Tab(child: Text("All")),
                 Tab(child: Text("Todo")),

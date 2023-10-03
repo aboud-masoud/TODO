@@ -37,14 +37,11 @@ class LoginScreen extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     if (emailController.text.isEmpty) {
-                      print(
-                          "email field is empty"); //TODO: HW: show it in toast message
+                      print("email field is empty"); //TODO: HW: show it in toast message
                     } else if (passwordController.text.isEmpty) {
-                      print(
-                          "password field is empty"); //TODO: HW: show it in toast message
+                      print("password field is empty"); //TODO: HW: show it in toast message
                     } else {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (ctx) {
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
                         return const HomeScereen();
                       }), (route) => false);
                     }
@@ -52,8 +49,7 @@ class LoginScreen extends StatelessWidget {
                   child: const Text("Login")),
               TextButton(
                   onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (ctx) {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
                       return const RegisterScreen();
                     }));
                   },
