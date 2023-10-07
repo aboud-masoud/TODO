@@ -62,11 +62,16 @@ class RegisterScreen extends StatelessWidget {
                           email: emailController.text,
                           password: passwordController.text)
                       .then((value) {
-                    print(value);
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (ctx) {
-                      return const HomeScereen();
-                    }), (route) => false);
+                    if (value == "Restration Compleated") {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (ctx) {
+                        return const HomeScereen();
+                      }), (route) => false);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(value),
+                      ));
+                    }
                   });
                 }
               },
