@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:todo_app/utils/firebase_firstore.dart';
 
 class HomeScereen extends StatefulWidget {
-  const HomeScereen({super.key});
+  final String emailAddress;
+  const HomeScereen({required this.emailAddress, super.key});
 
   @override
   State<HomeScereen> createState() => _HomeScereenState();
@@ -18,9 +19,17 @@ class _HomeScereenState extends State<HomeScereen> {
   final DateFormat formatter1 = DateFormat('MM/dd');
   final DateFormat formatter2 = DateFormat('hh:mm');
 
+  final instance = FirebaseFireStoreService();
+
+  @override
+  void initState() {
+    instance.initalize(widget.emailAddress);
+    super.initState();
+  }
+
   // Create new item
   Future<void> _createItem(Map<String, dynamic> newItem) async {
-    FirebaseFireStoreService().addItem(newItem).whenComplete(() {
+    instance.addItem(newItem).whenComplete(() {
       setState(() {});
     });
   }
@@ -55,7 +64,7 @@ class _HomeScereenState extends State<HomeScereen> {
         ],
       ),
       body: StreamBuilder(
-          stream: FirebaseFireStoreService().readItems(),
+          stream: instance.readItems(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             myList = streamSnapshot.data!.docs;
             return DefaultTabController(
@@ -172,7 +181,7 @@ class _HomeScereenState extends State<HomeScereen> {
                                 IconButton(
                                   onPressed: () {
                                     if (stringParserToEnum(selectedList[index]["status"]) == Status.done) {
-                                      FirebaseFireStoreService().deleteItem(selectedList[index].id);
+                                      instance.deleteItem(selectedList[index].id);
                                     } else {
                                       //EDIT
                                       showButtomSheet(
@@ -274,7 +283,7 @@ class _HomeScereenState extends State<HomeScereen> {
                               }
                             } else {
                               //EDIT
-                              FirebaseFireStoreService().updateItem(id, {
+                              instance.updateItem(id, {
                                 "title": controllerTitle.text,
                                 "desc": controllerDesc.text,
                                 "status": enumParserToString(character.value),

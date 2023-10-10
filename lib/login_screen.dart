@@ -11,6 +11,9 @@ class LoginScreen extends StatelessWidget {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
+    emailController.text = "xxx@mail.com";
+    passwordController.text = "123456";
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -52,7 +55,7 @@ class LoginScreen extends StatelessWidget {
                             .then((value) {
                           if (value == "correct") {
                             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
-                              return const HomeScereen();
+                              return HomeScereen(emailAddress: emailController.text);
                             }), (route) => false);
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(

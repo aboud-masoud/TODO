@@ -64,7 +64,7 @@ class RegisterScreen extends StatelessWidget {
                       .then((value) {
                     if (value == "Restration Compleated") {
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
-                        return const HomeScereen();
+                        return HomeScereen(emailAddress: emailController.text);
                       }), (route) => false);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
