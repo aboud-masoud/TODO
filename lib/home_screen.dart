@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
-// import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:todo_app/model/item.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/utils/firebase_firstore.dart';
-// import 'package:todo_app/utils/ad_helper.dart';
 
 class HomeScereen extends StatefulWidget {
   const HomeScereen({super.key});
@@ -16,79 +14,16 @@ class HomeScereen extends StatefulWidget {
 
 class _HomeScereenState extends State<HomeScereen> {
   List<QueryDocumentSnapshot<Object?>> myList = [];
-  // BannerAd? _bannerAd;
-  // final _todoBox = Hive.box('todo');
 
   final DateFormat formatter1 = DateFormat('MM/dd');
   final DateFormat formatter2 = DateFormat('hh:mm');
 
-  @override
-  void initState() {
-    super.initState();
-    // BannerAd(
-    //   adUnitId: AdHelper.bannerAdUnitId,
-    //   request: const AdRequest(),
-    //   size: AdSize.banner,
-    //   listener: BannerAdListener(
-    //     onAdLoaded: (ad) {
-    //       setState(() {
-    //         _bannerAd = ad as BannerAd;
-    //       });
-    //     },
-    //     onAdFailedToLoad: (ad, err) {
-    //       ad.dispose();
-    //     },
-    //   ),
-    // ).load();
-
-    // _refreshItems(); // Load data when app starts
-  }
-
-  // // Get all items from the database
-  void _refreshItems() {
-    //   final data = _todoBox.keys.map((key) {
-    //     final value = _todoBox.get(key);
-    //     return {
-    //       "key": key,
-    //       "title": value["title"],
-    //       "desc": value['desc'],
-    //       "status": stringParserToEnum(value['status']),
-    //       "createdDate": value['createdDate']
-    //     };
-    //   }).toList();
-
-    //   setState(() {
-    //     myList = data.reversed.toList();
-    //     // we use "reversed" to sort items in order from the latest to the oldest
-    //   });
-  }
-
   // Create new item
   Future<void> _createItem(Map<String, dynamic> newItem) async {
-    //   await _todoBox.add(newItem);
     FirebaseFireStoreService().addItem(newItem).whenComplete(() {
       setState(() {});
     });
-
-    //   _refreshItems(); // update the UI
   }
-
-  // // Update a single item
-  // Future<void> _updateItem(
-  //     {required int itemKey, required Map<String, dynamic> item}) async {
-  //   await _todoBox.put(itemKey, item);
-  //   _refreshItems(); // Update the UI
-  // }
-
-  // Future<void> _deleteItem(int itemKey) async {
-  //   await _todoBox.delete(itemKey);
-  //   _refreshItems(); // update the UI
-
-  //   // Display a snackbar
-  //   if (!mounted) return;
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('An item has been deleted')));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -148,22 +83,13 @@ class _HomeScereenState extends State<HomeScereen> {
                         children: [
                           showList(selectedList: myList),
                           showList(
-                            selectedList: myList
-                                .where((element) =>
-                                    element["status"] == Status.todo)
-                                .toList(),
+                            selectedList: myList.where((element) => element["status"] == "todo").toList(),
                           ),
                           showList(
-                            selectedList: myList
-                                .where((element) =>
-                                    element["status"] == Status.progessing)
-                                .toList(),
+                            selectedList: myList.where((element) => element["status"] == "progessing").toList(),
                           ),
                           showList(
-                            selectedList: myList
-                                .where((element) =>
-                                    element["status"] == Status.done)
-                                .toList(),
+                            selectedList: myList.where((element) => element["status"] == "done").toList(),
                           ),
                         ],
                       ),
@@ -176,8 +102,7 @@ class _HomeScereenState extends State<HomeScereen> {
     );
   }
 
-  Widget showList(
-      {required List<QueryDocumentSnapshot<Object?>> selectedList}) {
+  Widget showList({required List<QueryDocumentSnapshot<Object?>> selectedList}) {
     return selectedList.isEmpty
         ? const Center(
             child: Text("Empty list"),
@@ -187,10 +112,8 @@ class _HomeScereenState extends State<HomeScereen> {
             child: ListView.builder(
                 itemCount: selectedList.length,
                 itemBuilder: (context, index) {
-                  final String formattedDate1 = formatter1.format(
-                      DateTime.parse(selectedList[index]["createdDate"]));
-                  final String formattedDate2 = formatter2.format(
-                      DateTime.parse(selectedList[index]["createdDate"]));
+                  final String formattedDate1 = formatter1.format(DateTime.parse(selectedList[index]["createdDate"]));
+                  final String formattedDate2 = formatter2.format(DateTime.parse(selectedList[index]["createdDate"]));
 
                   return Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
@@ -200,13 +123,9 @@ class _HomeScereenState extends State<HomeScereen> {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  color: stringParserToEnum(
-                                              selectedList[index]["status"]) ==
-                                          Status.todo
+                                  color: stringParserToEnum(selectedList[index]["status"]) == Status.todo
                                       ? Colors.red
-                                      : stringParserToEnum(selectedList[index]
-                                                  ["status"]) ==
-                                              Status.progessing
+                                      : stringParserToEnum(selectedList[index]["status"]) == Status.progessing
                                           ? Colors.orange
                                           : Colors.green,
                                   borderRadius: BorderRadius.circular(25)),
@@ -214,19 +133,13 @@ class _HomeScereenState extends State<HomeScereen> {
                               height: 50,
                               child: Center(
                                 child: Text(
-                                  stringParserToEnum(
-                                              selectedList[index]["status"]) ==
-                                          Status.todo
+                                  stringParserToEnum(selectedList[index]["status"]) == Status.todo
                                       ? "T"
-                                      : stringParserToEnum(selectedList[index]
-                                                  ["status"]) ==
-                                              Status.progessing
+                                      : stringParserToEnum(selectedList[index]["status"]) == Status.progessing
                                           ? "P"
                                           : "D",
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xff444444),
-                                      fontSize: 35),
+                                      fontWeight: FontWeight.w500, color: Color(0xff444444), fontSize: 35),
                                 ),
                               ),
                             ),
@@ -237,15 +150,11 @@ class _HomeScereenState extends State<HomeScereen> {
                                 children: [
                                   Text(
                                     selectedList[index]["title"],
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
+                                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     selectedList[index]["desc"],
-                                    style: const TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500),
+                                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
@@ -254,38 +163,40 @@ class _HomeScereenState extends State<HomeScereen> {
                               children: [
                                 Text(
                                   formattedDate1,
-                                  style: const TextStyle(
-                                      fontSize: 8, fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   formattedDate2,
-                                  style: const TextStyle(
-                                      fontSize: 8, fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
                                 ),
                                 IconButton(
                                   onPressed: () {
-                                    // _deleteItem(selectedList[index]['key']);
+                                    if (stringParserToEnum(selectedList[index]["status"]) == Status.done) {
+                                      FirebaseFireStoreService().deleteItem(selectedList[index].id);
+                                    } else {
+                                      //EDIT
+                                      showButtomSheet(
+                                        context: context,
+                                        id: selectedList[index].id,
+                                        initDateValue: selectedList[index]["createdDate"],
+                                        initDescValue: selectedList[index]["desc"],
+                                        initTitleValue: selectedList[index]["title"],
+                                        initStatusValue: stringParserToEnum(selectedList[index]["status"]),
+                                      );
+                                    }
                                   },
                                   icon: Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: stringParserToEnum(
-                                                      selectedList[index]
-                                                          ["status"]) ==
-                                                  Status.done
+                                          color: stringParserToEnum(selectedList[index]["status"]) == Status.done
                                               ? Colors.red
                                               : Colors.orange),
                                     ),
                                     child: Icon(
-                                      stringParserToEnum(selectedList[index]
-                                                  ["status"]) ==
-                                              Status.done
+                                      stringParserToEnum(selectedList[index]["status"]) == Status.done
                                           ? Icons.delete
                                           : Icons.edit,
-                                      color: stringParserToEnum(
-                                                  selectedList[index]
-                                                      ["status"]) ==
-                                              Status.done
+                                      color: stringParserToEnum(selectedList[index]["status"]) == Status.done
                                           ? Colors.red
                                           : Colors.orange,
                                     ),
@@ -296,8 +207,7 @@ class _HomeScereenState extends State<HomeScereen> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: 55, right: 8, top: 8, bottom: 8),
+                          padding: const EdgeInsets.only(left: 55, right: 8, top: 8, bottom: 8),
                           child: Container(
                             height: 1,
                             color: Colors.grey[300],
@@ -312,7 +222,7 @@ class _HomeScereenState extends State<HomeScereen> {
 
   void showButtomSheet(
       {required BuildContext context,
-      int? itemKey,
+      String? id,
       String initTitleValue = "",
       String initDescValue = "",
       Status initStatusValue = Status.todo,
@@ -345,17 +255,15 @@ class _HomeScereenState extends State<HomeScereen> {
                         ),
                         Expanded(
                             child: Text(
-                          itemKey == null ? "Add New Item" : "Edit Item",
+                          id == null ? "Add New Item" : "Edit Item",
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         )),
                         TextButton(
                           onPressed: () {
-                            if (itemKey == null) {
+                            if (id == null) {
                               //ADD
-                              if (controllerTitle.text.isNotEmpty &&
-                                  controllerDesc.text.isNotEmpty) {
+                              if (controllerTitle.text.isNotEmpty && controllerDesc.text.isNotEmpty) {
                                 _createItem({
                                   "title": controllerTitle.text,
                                   "desc": controllerDesc.text,
@@ -366,12 +274,12 @@ class _HomeScereenState extends State<HomeScereen> {
                               }
                             } else {
                               //EDIT
-                              // _updateItem(itemKey: itemKey, item: {
-                              //   "title": controllerTitle.text,
-                              //   "desc": controllerDesc.text,
-                              //   "status": enumParserToString(character.value),
-                              //   "createdDate": DateTime.now().toString()
-                              // });
+                              FirebaseFireStoreService().updateItem(id, {
+                                "title": controllerTitle.text,
+                                "desc": controllerDesc.text,
+                                "status": enumParserToString(character.value),
+                                "createdDate": DateTime.now().toString()
+                              });
 
                               Navigator.pop(context);
                             }
@@ -386,8 +294,7 @@ class _HomeScereenState extends State<HomeScereen> {
                       padding: const EdgeInsets.all(16),
                       child: TextField(
                         controller: controllerTitle,
-                        decoration: const InputDecoration(
-                            hintText: "Title", border: OutlineInputBorder()),
+                        decoration: const InputDecoration(hintText: "Title", border: OutlineInputBorder()),
                       ),
                     ),
                     Padding(
@@ -395,8 +302,7 @@ class _HomeScereenState extends State<HomeScereen> {
                       child: TextField(
                         controller: controllerDesc,
                         maxLines: 5,
-                        decoration: const InputDecoration(
-                            hintText: "Desc", border: OutlineInputBorder()),
+                        decoration: const InputDecoration(hintText: "Desc", border: OutlineInputBorder()),
                       ),
                     ),
                     Row(

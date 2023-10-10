@@ -36,35 +36,34 @@ class RegisterScreen extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextField(
               controller: confirmPasswordController, //TODO: HW: Decorate Field
-              decoration:
-                  const InputDecoration(hintText: "Enter Confirm Password"),
+              decoration: const InputDecoration(hintText: "Enter Confirm Password"),
             ),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
               onPressed: () async {
                 if (emailController.text.isEmpty) {
-                  print(
-                      "email field is empty"); //TODO: HW: show it in toast message
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("email field is empty"),
+                  ));
                 } else if (passwordController.text.isEmpty) {
-                  print(
-                      "password field is empty"); //TODO: HW: show it in toast message
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("password field is empty"),
+                  ));
                 } else if (confirmPasswordController.text.isEmpty) {
-                  print(
-                      "confirm password field is empty"); //TODO: HW: show it in toast message
-                } else if (passwordController.text !=
-                    confirmPasswordController.text) {
-                  print(
-                      "password not equal confirm password"); //TODO: HW: show it in toast message
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("confirm password field is empty"),
+                  ));
+                } else if (passwordController.text != confirmPasswordController.text) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("password not equal confirm password"),
+                  ));
                 } else {
                   FirebaseAuthService()
-                      .registration(
-                          email: emailController.text,
-                          password: passwordController.text)
+                      .registration(email: emailController.text, password: passwordController.text)
                       .then((value) {
                     if (value == "Restration Compleated") {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (ctx) {
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx) {
                         return const HomeScereen();
                       }), (route) => false);
                     } else {
